@@ -1,2 +1,2 @@
-# 2015-05-14-wsu
-Data Carpentry workshop at Washington State University
+# 2015-04-23-stanford
+Stanford Data Carpentry Workshop 
