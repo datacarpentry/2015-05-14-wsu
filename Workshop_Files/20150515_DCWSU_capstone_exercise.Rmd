@@ -1,5 +1,5 @@
 ---
-title: "Capstone Experience"
+title: "Capstone Exercise"
 author: "Naupaka Zimmerman"
 date: "May 15, 2015"
 output: html_document
