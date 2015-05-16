@@ -1,0 +1,120 @@
+---
+title: "Capstone Experience"
+author: "Naupaka Zimmerman"
+date: "May 15, 2015"
+output: html_document
+---
+
+```{r load-data-and-packages, echo=FALSE, message=FALSE,}
+# load in dataset
+portal <- read.csv("data/cleaned/20150514_NBZ_Portal_joined.csv")
+
+# load libraries we'll need
+library("ggplot2")
+library("dplyr")
+```
+
+
+### Differences in weight by sex
+
+```{r calc-means-by-sex}
+# create summary data of means by gender for M and F animals
+mean.weight.by.sex <- portal %>% 
+    filter(sex == "M" | sex == "F") %>% 
+    group_by(sex) %>% 
+    summarise(mean = mean(weight, na.rm = TRUE))
+
+# Calculate mean weight across all males, round the result to 2 decimal places
+male.mean.weight <- mean.weight.by.sex %>% 
+    filter(sex == "M") %>% 
+    select(mean)
+male.mean.weight <- round(male.mean.weight, 3)
+
+# Calculate mean weight across all females, round the result to 2 decimal places
+female.mean.weight <- mean.weight.by.sex %>% 
+    filter(sex == "F") %>% 
+    select(mean)
+female.mean.weight <- round(female.mean.weight, 2)
+```
+
+```{r means-t-test}
+# Calculate difference between the means with a t-test
+# If this is significant, then say so in the markdown text below
+# If not, then change to state that it is not significant
+weight.ttest <- t.test(portal[portal$sex == "F","weight"], 
+                       portal[portal$sex == "M","weight"], 
+                       na.rm = TRUE)
+```
+
+As you can see in the following figure, the average weight in grams for male species measured was `r male.mean.weight` and for females it was `r female.mean.weight`. This `r if (weight.ttest$p.value < 0.05){"is"} else{"is not"}` a statistically significant difference (p = `r round(weight.ttest$p.value, 2)`).
+
+```{r boxplot-by-sex, echo=FALSE, message=FALSE, warning=FALSE}
+# Generate boxplot of mean weight of all animals, seperated by sex
+portal %>% 
+    filter(sex == "M" | sex == "F") %>% 
+    ggplot(aes(x = sex, y = weight)) +
+        geom_boxplot() +
+        ggtitle("Boxplot of mean weight across all animals by sex")
+```
+
+### Distribution of measured hindfoot lengths
+
+```{r}
+# Generate a histogram of hindfoot length across all species
+ggplot(portal, aes(x = hindfoot_length)) + 
+    geom_histogram() + 
+    ggtitle("Histogram of hindfoot lengths")
+
+# Generate a histogram of hindfoot length across all species, 
+# but with narrower binwidths
+ggplot(portal, aes(x = hindfoot_length)) + 
+    geom_histogram(bin = 1) + 
+    ggtitle("Histogram of hindfoot lengths, using narrower bin widths")
+```
+
+### Scatterplot of three selected species
+
+```{r}
+# Choose three species on the next line:
+chosen.species <- c("DM", "DO", "DS")
+
+species.names <- portal %>% 
+    filter(species_id %in% chosen.species) %>%
+    group_by(genus, species) %>% 
+    summarise()
+```
+
+#### Generate a scatterplot of three chosen species:
+
+* *`r species.names$genus[1]` `r species.names$species[1]`*
+* *`r species.names$genus[2]` `r species.names$species[2]`*
+* *`r species.names$genus[3]` `r species.names$species[3]`*
+
+```{r, warning=FALSE}
+# create a scatterplot of the three chosen species, coloring by species ID
+portal %>% 
+    filter(species_id %in% chosen.species) %>% 
+    ggplot(aes(x = weight, y = hindfoot_length, color = species_id)) +
+    geom_point()
+
+```
+
+### Observation counts for species DM over time, faceted by plot type
+
+```{r}
+# Generate a line plot of the number of species observed in each of the 
+# different treatment types, for species DM, over time
+
+portal %>% 
+    filter(species_id == "DM") %>% 
+    group_by(plot_type, year) %>% 
+    tally() %>% 
+    ggplot(aes(x = year, y = n)) +
+        geom_line() +
+        facet_wrap(~ plot_type)
+```
+
+It appears that the Long-term Krat Exclosure treatment was effective at keeping individuals out, and that the Rodent exclosure and Short-term Krat exclosure were also effective, particularly after 1990.
+
+
+
