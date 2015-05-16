@@ -1,0 +1,476 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Language" content="en-us" />
+<title>/2015-05-14-WSU-DataCarpentry</title>
+</head>
+<body>Welcome to MoPad!<br
+/><br
+/>This pad text is synchronized as you type, so that everyone viewing this page sees the same text.&nbsp; This allows you to collaborate seamlessly on documents!<br
+/>.<br
+/>Please be cognizant of whether you are using a public pad or private/team pad, and take appropriate precautions with data you post here!<br
+/><br
+/>Add your name in the field on the top right --&gt;<br
+/>&nbsp;<br
+/>Workshop website with instructions and links to needed software downloads: <a href="http://datacarpentry.github.io/2015-05-14-wsu/">http://datacarpentry.github.io/2015-05-14-wsu/</a><br
+/>&nbsp;<br
+/>Thursday morning: Spreadsheets and OpenRefine<br
+/>##########################################<br
+/><br
+/>Download this data file (1977.xls):<br
+/><a href="http://npk.io/TN6G+">http://npk.io/TN6G+</a><br
+/>&nbsp;<br
+/>Folder structure:<br
+/>DC_WSU/<br
+/>&nbsp;&nbsp;&nbsp; data/<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1977_working.xls<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; raw/<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1977.xls<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cleaned/<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1977_restructured_INITIALS_20150514.csv<br
+/>&nbsp;&nbsp;&nbsp; code/<br
+/>&nbsp;&nbsp;&nbsp; output/<br
+/><br
+/><br
+/>Splitting dates into separate columns:<br
+/>- use =month(datecol), =year(datecol), and day(datecol) formulas, or:<br
+/>- data --&gt; text to columns --&gt; delimited --&gt; Other: "/" --&gt; Finish<br
+/><br
+/>Link for data to work with in OpenRefine:<br
+/><a href="http://npk.io/1jhEu+">http://npk.io/1jhEu+</a><br
+/><br
+/>=CONCATENATE(DEC2HEX(RANDBETWEEN(0,4294967295),8),"-",DEC2HEX(RANDBETWEEN(0,42949),4),"-",DEC2HEX(RANDBETWEEN(0,42949),4),"-",DEC2HEX(RANDBETWEEN(0,42949),4),"-",DEC2HEX(RANDBETWEEN(0,4294967295),8),DEC2HEX(RANDBETWEEN(0,42949),4))<br
+/><br
+/>OpenRefine: Launch the app (called either OpenRefine or Google Refine), then open browser (Firefox works best) and type localhost:3333 in the URL bar<br
+/><br
+/>Link to cleaned data for SQL:<br
+/><a href="http://npk.io/16sy9+">http://npk.io/16sy9+</a><br
+/><br
+/>1) How are the tables related?<br
+/>&nbsp;&nbsp;&nbsp; -Find "primary key" in each table<br
+/>&nbsp;&nbsp;&nbsp; -Look for any "foreign keys" in each table<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -Make sure the foreign key exactly matches primary key in other table&nbsp;<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; --&gt; this is how you connect the tables together<br
+/>2) What type is each field in each table?<br
+/>&nbsp;&nbsp;&nbsp; Types:&nbsp; INT (integer, whole number), char/string (text), float/double (decimals)<br
+/><br
+/>Many people are hitting this same issue: if when you import the table and go to set the column types, the column names don't appear, hit cancel and make sure "First row contains column names" is selected <a href="http://imgur.com/NNjc2fx">http://imgur.com/NNjc2fx</a><br
+/><br
+/>'Execute SQL' query examples:<br
+/>SELECT year, month, day FROM surveys<br
+/>SELECT * FROM surveys<br
+/>SELECT DISTINCT species_id FROM surveys<br
+/>SELECT DISTINCT year FROM surveys<br
+/>SELECT DISTINCT year, species_id FROM surveys<br
+/>SELECT year, month, day, weight/1000.0 FROM surveys<br
+/>SELECT year, month, day, ROUND(weight/1000.0, 2) FROM surveys<br
+/>SELECT year, month, day, species_id, weight * 1000.0 FROM surveys<br
+/>SELECT * FROM surveys WHERE species_id = "DM"<br
+/>SELECT * FROM surveys WHERE (year &gt;= 2000)<br
+/>SELECT * FROM surveys WHERE (year &gt;= 2000) and species_id = "DM"<br
+/>SELECT * FROM surveys WHERE (year &gt;= 2000) AND ((species_id = "DM") OR (species_id="DO"))<br
+/><br
+/>Exercise:&nbsp;<br
+/>Write a query that returns: day, month, year, species_id, and weight in kg for individuals caught in plot 1 that weigh more than 75 grams<br
+/><br
+/>SELECT day, month, year, species_id, weight / 1000.0&nbsp;<br
+/>FROM surveys<br
+/>WHERE plot_id = 1 AND weight &gt; 75<br
+/><br
+/>SELECT *<br
+/>FROM surveys<br
+/>WHERE (year &gt;= 2000) AND (species_id IN ("DM", "DO", "DS"))<br
+/><br
+/>SELECT *&nbsp;<br
+/>FROM species<br
+/>ORDER BY taxa ASC;<br
+/><br
+/>SELECT *&nbsp;<br
+/>FROM species<br
+/>ORDER BY taxa DESC;<br
+/><br
+/>SELECT *&nbsp;<br
+/>FROM species<br
+/>ORDER BY genus ASC, species ASC;<br
+/><br
+/>Challenge:&nbsp;<br
+/>Write a query that returns year, species_id, and weight in kg from the surveys table, sorted with the largest weights at the top<br
+/>SELECT year, species_id, weight/1000.0&nbsp;<br
+/>FROM surveys<br
+/>ORDER BY weight DESC;<br
+/><br
+/>#order by a field that isn't selected<br
+/>SELECT genus, species<br
+/>FROM species<br
+/>WHERE taxa = "Bird"<br
+/>ORDER BY species_id ASC;<br
+/><br
+/>SELECT genus<br
+/>FROM species<br
+/>WHERE taxa = "Bird"<br
+/>ORDER BY species_id ASC;<br
+/><br
+/><br
+/>Challenge:<br
+/>Display 3 date fields, species_id, weight in kg (round to two decimal places), for all individuals captured in 1999, ordered alphabetically by species_id<br
+/>SELECT month, day, year, species_id, ROUND(weight / 1000.0, 2)<br
+/>FROM surveys<br
+/>WHERE year = 1999<br
+/>ORDER BY species_id ASC;<br
+/><br
+/><br
+/>SELECT COUNT(*), SUM(weight)<br
+/>FROM surveys;<br
+/><br
+/>SELECT species_id, COUNT(*)<br
+/>FROM surveys<br
+/>GROUP BY species_id;<br
+/><br
+/># Are any records duplicated?<br
+/>SELECT record_id, COUNT(*)<br
+/>FROM surveys<br
+/>GROUP BY record_id;<br
+/><br
+/># The below will put zeroes in the COUNT(*) &gt; 1 column if the count of the number of records with that record_id is NOT greater than 1<br
+/>SELECT record_id, COUNT(*) &gt; 1<br
+/>FROM surveys<br
+/>GROUP BY record_id;<br
+/><br
+/>SELECT species_id, COUNT(*)&nbsp;<br
+/>FROM surveys<br
+/>GROUP BY species_id;<br
+/><br
+/>Challenge:<br
+/>Write 2 queries.&nbsp;<br
+/>The first returns the number of individuals counted in each year.<br
+/>The second gives the average weight of each species in each year.<br
+/><br
+/># The query below gives the number of individuals counted in each year<br
+/>SELECT year, COUNT(*)<br
+/>FROM surveys<br
+/>GROUP BY year<br
+/><br
+/># The query below gives the average weight of each species in each year<br
+/>SELECT year, species_id, AVG(weight)<br
+/>FROM surveys<br
+/>GROUP BY year, species_id<br
+/><br
+/># Join `species` and `surveys` tables on the column `species_id`<br
+/>SELECT *<br
+/>FROM surveys<br
+/>JOIN species ON surveys.species_id = species.species_id<br
+/><br
+/># Select only the columns you want from the two joined tables<br
+/>SELECT surveys.year, surveys.month, surveys.day, species.genus, species.species<br
+/>FROM surveys<br
+/>JOIN species ON surveys.species_id = species.species_id<br
+/><br
+/>Challenge:<br
+/>2 queries<br
+/>Write a query that returns the genus, species, and weight of every individual.<br
+/>Write a query that returns the genus, species, and weight of every individual aggregated by plot.<br
+/><br
+/># Challenge part 1: return the genus, species, and weight of every individual<br
+/>SELECT species.genus, species.species, surveys.weight<br
+/>FROM surveys<br
+/>JOIN species ON surveys.species_id = species.species_id&nbsp;<br
+/>WHERE surveys.weight IS NOT NULL;<br
+/><br
+/>or<br
+/><br
+/>SELECT species.genus, species.species, surveys.weight<br
+/>FROM surveys<br
+/>JOIN species ON surveys.species_id = species.species_id<br
+/>WHERE surveys.weight !=0<br
+/><br
+/># Challenge part 2 (was ambiguously stated)<br
+/>SELECT surveys.plot_id, species.genus, species.species, AVG(surveys.weight)<br
+/>FROM surveys<br
+/>JOIN species ON surveys.species_id = species.species_id<br
+/>GROUP BY surveys.plot_id;<br
+/><br
+/>Challenge:<br
+/>Write a query that returns the plot type, genus, species, and average weight of every species, aggregated by plot type, sorted by genus and then species in alphabetic order within plot types.<br
+/><br
+/><br
+/>SELECT plots.plot_type, species.genus, species.species, AVG(surveys.weight)<br
+/>FROM surveys<br
+/>JOIN plots ON surveys.plot_id = plots.plot_id<br
+/>JOIN species ON species.species_id = surveys.species_id<br
+/>GROUP BY plots.plot_type, species.genus, species.species<br
+/>ORDER BY plots.plot_type ASC, species.genus ASC, species.species ASC;<br
+/><br
+/>Join all fields from all three tables into a single output. And then export this to a csv in your cleaned data folder with todays full 8 digit numeric date, your initials, the name of the dataset ("Portal") and the word "joined".<br
+/><br
+/># Join all 3 tables, don't duplicate species_id or plot_id<br
+/>SELECT sur.*, sp.genus, sp.species, sp.taxa, pl.plot_type<br
+/>FROM surveys AS sur<br
+/>JOIN species AS sp ON sur.species_id = sp.species_id<br
+/>JOIN plots AS pl ON sur.plot_id = pl.plot_id<br
+/><br
+/>###########################<br
+/>####&nbsp; FRIDAY: Coding in R&nbsp; ####<br
+/>###########################<br
+/><br
+/>Wrap-up from yesterday: considerations for making your own relational database<br
+/>Entity Relationship Diagram<br
+/>-How do tables relate to one another?<br
+/>&nbsp;&nbsp;&nbsp; -one to one (1:1)<br
+/>&nbsp;&nbsp;&nbsp; -one to many (1:many)<br
+/>Notation - can there be 0, 1, or many<br
+/><br
+/>Link to course website:<br
+/><a href="http://datacarpentry.github.io/2015-05-14-wsu/">http://datacarpentry.github.io/2015-05-14-wsu/</a><br
+/><br
+/><b>Reasons to use R:</b><br
+/><ul><li>Free, open source</li
+><li>Large community of users, which means large set of packages available for many specialized types of analyses</li
+><li>Very powerful data visualization tools<br/><br
+/></li></ul
+><b>Resources for help and support on the internet:</b><br
+/><ul><li>Twitter try the hashtag #rstats</li
+><li>Stack-overflow <a href="http://stackoverflow.com/">http://stackoverflow.com/</a></li
+><li>R-discuss listserv <a href="http://www.r-project.org/mail.html">http://www.r-project.org/mail.html</a><br/><br
+/></li></ul
+><b>Creating a project in RStudio</b><br
+/>File -&gt; New Project -&gt; From an existing directorys", "Ernst", "Theodosius"),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; author_last=c(Darwin, Mayr, Dobzhansky),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; year=c(1<br
+/>Browse and select the directory we were working in yesterday<br
+/><br
+/><b>Link to joined full dataset from yesterday:</b><br
+/><a href="http://npk.io/13Gqo+">http://npk.io/13Gqo+</a><br
+/><br
+/>getwd()<br
+/>surveys&nbsp; &lt;- read.csv("&lt;datafilepathway&gt;")<br
+/><br
+/>example_data &lt;- data.frame(animal = c("dog", "cat", "sea cucumber"),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; feel = c("furry", "furry", "squishy"),&nbsp;<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; weight = c(45, 8, 1.1))<br
+/><br
+/># 1st Challenge data frame:<br
+/># FIXME<br
+/>author_book &lt;- data.frame(author_first=c("Charles", "Ernst", "Theodosius"),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; author_last=c(Darwin, Mayr, Dobzhansky),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; year=c(1942, 1970))<br
+/><br
+/># Fixed<br
+/>author_book &lt;- data.frame(author_first=c("Charles", "Ernst", "Theodosius"),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; author_last=c("Darwin", "Mayr", "Dobzhansky"),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; year=c(1859, 1942, 1970))<br
+/><br
+/># 2nd Challenge data frame:<br
+/>country_climate &lt;- data.frame(country=c("Canada", "Panama", "South Africa", "Australia"),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; climate=c("cold", "hot", "temperate", "hot/temperate"),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; temperature=c(10, 30, 18, "15"),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; north_hemisphere=c(TRUE, TRUE, FALSE, "FALSE"),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; has_kangaroo=c(FALSE, FALSE, FALSE, 1))<br
+/><br
+/># R script that I am writing<br
+/><a href="https://www.dropbox.com/s/al0etc1i36le66o/dc_wsu_script_20150515.txt?dl=0"><u>https://www.dropbox.com/s/al0etc1i36le66o/dc_wsu_script_20150515.txt?dl=0</u></a><br
+/><br
+/># Challenge 3:<br
+/># The function nrow() on a data.frame returns the number of rows. Use it, in conjuction with seq() to create a newdata.frame called surveys_by_10 that includes every 10th row of the survey data frame starting at row 10 (10, 20, 30, …)<br
+/><br
+/># dplyr<br
+/># Challenge 1<br
+/># Using pipes, subset the data to include rows before 1995. Retain columns year, sex, and weight.<br
+/><br
+/>surveys %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; filter(year &lt; 1995) %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; select(year, sex, weight)<br
+/><br
+/>surveys %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; group_by(sex) %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; tally()<br
+/><br
+/>surveys %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; group_by(sex) %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; summarize(mean_weight = mean(weigh, na.rm = TRUE))<br
+/><br
+/># For each sex - species_id combination find the mean weight and the minimum weight (removing NAs)<br
+/>surveys %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; group_by(sex, species_id) %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; summarize(mean_weight = mean(weight, na.rm = TRUE),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; min.weight = min(weight, na.rm)) %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; filter(!is.nan(mean_weight))<br
+/><br
+/># You can also filter to only include "M" and "F" sex<br
+/>surveys %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; filter(sex == "M" | sex == "F") %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; group_by(sex, species_id) %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; summarize(mean_weight = mean(weight, na.rm = TRUE),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; min.weight = min(weight, na.rm)) %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; filter(!is.nan(mean_weight))<br
+/><br
+/><br
+/># Challenge 2<br
+/># How many times was each plot_type surveyed?<br
+/><br
+/>surveys %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; group_by(plot_type) %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; tally()<br
+/><br
+/><b>Some cheat sheets for R</b><br
+/>The "Data Wrangling" cheatsheet has many of the functions in dplyr<br
+/><a href="http://www.rstudio.com/resources/cheatsheets/">http://www.rstudio.com/resources/cheatsheets/</a><br
+/><br
+/># Challenge 3<br
+/># Use group_by() and summarize() to find the mean, min, and max hindfoot length for each species.<br
+/><br
+/>surveys %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; group_by(species_id) %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; summarize(mean_ln = mean(hindfoot_length, na.rm = TRUE),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; min_ln = min(hindfoot_length, na.rm = TRUE),<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; max_ln = max(hindfoot_length, na.rm = TRUE)) %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; filter(!is.nan(mean_ln))<br
+/><br
+/>##########################################<br
+/>Friday afternoon -- ggplot2 and knitr in R<br
+/>##########################################<br
+/><br
+/><b>Link to pdf of ggplot slides:</b><br
+/><a href="https://raw.githubusercontent.com/naupaka/esa_data_viz_2014/master/introduction/ggplot.pdf">https://raw.githubusercontent.com/naupaka/esa_data_viz_2014/master/introduction/ggplot.pdf</a><br
+/><br
+/><br
+/>myplot &lt;- ggplot(data = iris, aes(x = Sepal.Length, y = Sepal.Width))<br
+/>summary(myplot)<br
+/><br
+/>ggplot(data = iris, aes(x = Sepal.Length, y = Sepal.Width)) +<br
+/>&nbsp;&nbsp;&nbsp; geom_point()<br
+/><br
+/># Change point size<br
+/>ggplot(data = iris, aes(x = Sepal.Length, y = Sepal.Width)) +<br
+/>&nbsp;&nbsp;&nbsp; geom_point(size = 3)<br
+/><br
+/># Differentiate points with color<br
+/>ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +<br
+/>&nbsp;&nbsp;&nbsp; geom_point(size = 3)<br
+/><br
+/># Changing the aesthetics of a geom: differentiate points by shape<br
+/>ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +<br
+/>&nbsp;&nbsp;&nbsp; geom_point(aes(shape = Species), size = 3)<br
+/><br
+/># Why aes(shape = Species)?<br
+/># if you want to map a variable to a parameter, you need to use aes()<br
+/># if you want to set something, like size = 3, then you do it outside of aes()<br
+/><br
+/># Exercise<br
+/># Make a small sample of the diamonds dataset<br
+/>d2 &lt;- diamonds[sample(1:dim(diamonds)[1], 1000), ]<br
+/># Then generate the plot shown on the screen<br
+/># x is "carat", y is "price", color is "color"<br
+/><br
+/>ggplot(d2, aes(x = carat, y = price, color = color)) +<br
+/>&nbsp;&nbsp;&nbsp; geom_point()<br
+/><br
+/>Accidental aRt: <a href="http://accidental-art.tumblr.com/">http://accidental-art.tumblr.com/</a><br
+/><br
+/># Faceting: single column, multiple rows<br
+/>ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +<br
+/>&nbsp;&nbsp;&nbsp; geom_point() +<br
+/>&nbsp;&nbsp;&nbsp; facet_grid(Species ~ . )<br
+/><br
+/># Faceting: single row, multiple columns<br
+/>ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +<br
+/>&nbsp;&nbsp;&nbsp; geom_point() +<br
+/>&nbsp;&nbsp;&nbsp; facet_grid(. ~ Species)<br
+/><br
+/># or just wrap your facets<br
+/>ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +<br
+/>&nbsp;&nbsp;&nbsp; geom_point() +<br
+/>&nbsp;&nbsp;&nbsp; facet_wrap(~ Species)<br
+/><br
+/># Old Faithful eruption dataset -- waiting time histogram<br
+/>h &lt;- ggplot(faithful, aes(x = waiting))<br
+/>h + geom_histogram()<br
+/><br
+/># You can specify the binwidth for geom_histogram()<br
+/>h + geom_histogram(binwidth = 30, color = "blue")<br
+/><br
+/># Notice that with such a large binwidth it looks like a single mode, approximately normal<br
+/># But with the automatic binwidth it is clearly bimodal<br
+/># Be careful when plotting your data<br
+/><br
+/># You don't have this dataset, but here's an example of a line plot<br
+/>climate &lt;- read.csv("../data/climate.csv", header=T)<br
+/>ggplot (climate, aes(Year, Anomaly10y)) +<br
+/>&nbsp;&nbsp;&nbsp; geom_line()<br
+/><br
+/># If you want, you can try reading it from the web, but we didn't do it in the workshop<br
+/>climate &lt;- read.cv(text =<br
+/>&nbsp;&nbsp;&nbsp; RCurl::getURL(<a href="http://raw.github.com/karthikram/ggplot-lecture/master/climate.csv))">http://raw.github.com/karthikram/ggplot-lecture/master/climate.csv))</a><br
+/><br
+/># Let's use the data from yesterday and look at weight vs. hindfoot length<br
+/>ggplot(surveys, aes(x = weight, y = hindfoot_length)) +&nbsp;<br
+/>&nbsp;&nbsp;&nbsp; geom_point()<br
+/><br
+/># There are a lot of points that overlap, you can set the alpha value to set transparency<br
+/>ggplot(surveys, aes(x = weight, y = hindfoot_length)) +&nbsp;<br
+/>&nbsp;&nbsp;&nbsp; geom_point(alpha =0.1, color = "purple")<br
+/><br
+/># Challenge 1<br
+/># Create a subset of the data for one species and create a scatterplot of weight vs hindfoot length for that subset<br
+/><br
+/>dm &lt;- surveys %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; filter(species == "DM")<br
+/>ggplot(dm, aes(x = weight, y = hindfoot_length) +<br
+/>&nbsp;&nbsp;&nbsp; geom_point<br
+/><br
+/># Or you can use the pipe function to integrate it together<br
+/>surveys %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; filter(species == "DM") %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; ggplot(dm, aes(x = weight, y = hindfoot_length) +<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; geom_point<br
+/><br
+/># boxplots of weights by species (plus jitter)<br
+/>surveys %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; filter(weight &gt; 0) %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; ggplot(aes(x = species_id, y = weight)) +<br
+/>&nbsp;&nbsp;&nbsp; geom_jitter(alpha = 0.3, color = "tomato") +<br
+/>&nbsp;&nbsp;&nbsp; geom_boxplot()<br
+/><br
+/># Calculate the number of counts per year for each genus<br
+/>surveys %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; group_by(year, genus) %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; tally() %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; ggplot(aes(x = year, y = n, group = genus)) +<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; geom_line()<br
+/><br
+/># assign it to p<br
+/>p &lt;- surveys %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; group_by(year, genus) %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; tally() %&gt;%<br
+/>&nbsp;&nbsp;&nbsp; ggplot(aes(x = year, y = n, group = genus)) +<br
+/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; geom_line()<br
+/><br
+/># Save a plot as a .png file<br
+/>ggsave("output/lines_by_genus.png", p, height = 6, width = 8)<br
+/># or as a .pdf file<br
+/>ggsave("output/lines_by_genus.pdf", p, height = 6, width = 8)<br
+/><br
+/>Plot to paste in RMarkdown chunk:<br
+/>surveys %&gt;%<br
+/>&nbsp; group_by(year, genus) %&gt;%<br
+/>&nbsp; tally() %&gt;%<br
+/>&nbsp; ggplot(aes(x = year, y = n, group = genus, color = genus)) +<br
+/>&nbsp; geom_line()<br
+/>&nbsp;&nbsp;<br
+/>&nbsp;&nbsp;<br
+/><b>Capstone Exercise:</b><br
+/>Using an Rmd file, create a short analysis report of the dataset. Feel free to collaborate!<br
+/><br
+/>1. Write an Rmd script to load the Portal data file and make a box plot of weight by sex for male and female animals (male and female only; discard data for other sexes). Make sure you load any packages (dplyr, etc.) that you may need to create this. Describe the results, including the mean of each group, using markdown text.<br
+/>2. Make a histogram of all hindfoot lengths using the default bin widths, then a second one with narrower bin widths.<br
+/>3. Choose three species. Make a scatterplot of weight (on x) vs hindfoot length, with the points colored by species id.<br
+/>4. For the species code DM, use dplyr to calculate the total number of counts per year for each plot type.<br
+/>5. Using the data frame you just created, plot the counts (of the species "DM") over time as line graphs faceted by plot type.<br
+/><br
+/>My RMarkdown file: <a href="https://www.dropbox.com/s/93iss73crg7dzda/DC_WSU_r">https://www.dropbox.com/s/93iss73crg7dzda/DC_WSU_r</a><br
+/><br
+/><br
+/>eport.txt?dl=0<br
+/><br
+/></body>
+</html>
