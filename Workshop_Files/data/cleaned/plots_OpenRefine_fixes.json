@@ -1,0 +1,92 @@
+[
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column plot_type",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "plot_type",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Rodent Exclosure",
+          "rodent Exclosure"
+        ],
+        "to": "Rodent Exclosure"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Short-term Krat Exclosure",
+          "Shortterm Krat Exclosure"
+        ],
+        "to": "Short-term Krat Exclosure"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column plot_type",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "plot_type",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Long-term Krat Exclosure",
+          "Long-term Krt Exclosure"
+        ],
+        "to": "Long-term Krat Exclosure"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Spectab exclosure",
+          "Spectab excllosure"
+        ],
+        "to": "Spectab exclosure"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Rodent Exclosure",
+          "Rodint Exclosure"
+        ],
+        "to": "Rodent Exclosure"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column plot_type",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "plot_type",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Control",
+          "Contrl"
+        ],
+        "to": "Control"
+      }
+    ]
+  }
+]

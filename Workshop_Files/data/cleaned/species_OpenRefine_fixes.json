@@ -1,0 +1,135 @@
+[
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column genus",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "genus",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Reithrodontomys",
+          "Reithodontomys"
+        ],
+        "to": "Reithrodontomys"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Dipodomys",
+          "Dpodomys"
+        ],
+        "to": "Dipodomys"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Onychomys",
+          "Onychomis"
+        ],
+        "to": "Onychomys"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column genus",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "genus",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Dipodomys",
+          "Dipodmys"
+        ],
+        "to": "Dipodomys"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column species",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "species",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "sp.",
+          "sp",
+          "sp. ",
+          "sp.  "
+        ],
+        "to": "sp."
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column taxa",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "taxa",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Bird",
+          "Brd"
+        ],
+        "to": "Bird"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Rodent",
+          "Rodnt"
+        ],
+        "to": "Rodent"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column taxa",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "taxa",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Rabbiit"
+        ],
+        "to": "Rabbit"
+      }
+    ]
+  }
+]

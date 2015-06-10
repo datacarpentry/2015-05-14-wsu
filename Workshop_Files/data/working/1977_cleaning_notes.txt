@@ -1,0 +1,6 @@
+Cleaning steps done by Naupaka Zimmerman naupaka@gmail.com
+On May 14, 2015 in order to clean up 1977.xls
+##########################################
+
+Assume all weight values are in grams, some are unlabeled.
+NAs were added for missing values in the weight column.
